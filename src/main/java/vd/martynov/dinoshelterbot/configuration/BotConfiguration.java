@@ -1,4 +1,4 @@
-package vd.martynov.bot.dinoshelterbot.configuration;
+package vd.martynov.dinoshelterbot.configuration;
 
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
-import vd.martynov.bot.dinoshelterbot.listeners.EventListener;
+import vd.martynov.dinoshelterbot.listeners.EventListener;
 
 import java.util.List;
 

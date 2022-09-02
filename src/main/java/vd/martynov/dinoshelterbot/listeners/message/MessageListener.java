@@ -1,4 +1,4 @@
-package vd.martynov.bot.dinoshelterbot.listeners.message;
+package vd.martynov.dinoshelterbot.listeners.message;
 
 import discord4j.core.object.entity.Message;
 import reactor.core.publisher.Mono;

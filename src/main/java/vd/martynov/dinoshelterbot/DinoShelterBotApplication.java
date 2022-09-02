@@ -1,4 +1,4 @@
-package vd.martynov.bot.dinoshelterbot;
+package vd.martynov.dinoshelterbot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

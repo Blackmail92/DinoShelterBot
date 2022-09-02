@@ -1,11 +1,11 @@
-package vd.martynov.bot.dinoshelterbot.listeners.message.create;
+package vd.martynov.dinoshelterbot.listeners.message.create;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import vd.martynov.bot.dinoshelterbot.listeners.EventListener;
-import vd.martynov.bot.dinoshelterbot.listeners.message.MessageListener;
+import vd.martynov.dinoshelterbot.listeners.EventListener;
+import vd.martynov.dinoshelterbot.listeners.message.MessageListener;
 
 @Component
 public class MessageCreateListener extends MessageListener implements EventListener<MessageCreateEvent> {

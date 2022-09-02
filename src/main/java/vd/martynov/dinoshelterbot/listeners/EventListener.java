@@ -1,4 +1,4 @@
-package vd.martynov.bot.dinoshelterbot.listeners;
+package vd.martynov.dinoshelterbot.listeners;
 
 import discord4j.core.event.domain.Event;
 import org.slf4j.Logger;
