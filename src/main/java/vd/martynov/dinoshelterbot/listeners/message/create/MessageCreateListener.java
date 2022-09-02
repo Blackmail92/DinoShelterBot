@@ -2,12 +2,12 @@ package vd.martynov.dinoshelterbot.listeners.message.create;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import vd.martynov.dinoshelterbot.listeners.EventListener;
 import vd.martynov.dinoshelterbot.listeners.message.MessageListener;
 
-@Component
+@Service
 public class MessageCreateListener extends MessageListener implements EventListener<MessageCreateEvent> {
 
     @Override
