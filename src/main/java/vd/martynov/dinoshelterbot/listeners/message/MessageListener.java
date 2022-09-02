@@ -17,10 +17,12 @@ public abstract class MessageListener {
                 .flatMap(Message::getChannel)
                 .flatMap(channel -> {
                     String word = message.getContent();
-                    if (word.startsWith("с")) {
-                        return channel.createMessage(word.replaceFirst("с", "т"));
+                    if (word.toLowerCase().startsWith("с")) {
+                        String t = Character.isLowerCase(word.charAt(0)) ? "т" : "Т";
+                        return channel.createMessage(t + word.substring(1));
                     } else {
-                        return channel.createMessage(word.replaceFirst("т", "с"));
+                        String c = Character.isLowerCase(word.charAt(0)) ? "с" : "С";
+                        return channel.createMessage(c + word.substring(1));
                     }
                 }).then();
     }
