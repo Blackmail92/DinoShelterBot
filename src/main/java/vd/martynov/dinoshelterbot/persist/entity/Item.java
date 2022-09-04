@@ -26,4 +26,9 @@ public class Item {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id", nullable = false)
     private Inventory inventory;
+
+    @Override
+    public String toString() {
+        return quantity + "x " + name;
+    }
 }

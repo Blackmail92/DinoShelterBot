@@ -3,12 +3,14 @@ package vd.martynov.dinoshelterbot.listeners.message;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.rest.util.Color;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import vd.martynov.dinoshelterbot.persist.entity.Inventory;
 import vd.martynov.dinoshelterbot.persist.service.InventoryService;
 
-import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 import java.util.Random;
 
@@ -43,20 +45,24 @@ public abstract class MessageListener {
     public Mono<Void> processInventory(User author, InventoryService inventoryService, MessageCreateEvent event) {
         log.info("{} id: {}", author.getUsername(), author.getId().asLong());
         long id = author.getId().asLong();
-        String answer;
+        EmbedCreateSpec.Builder responseBuilder = EmbedCreateSpec.builder();
         Inventory inventory = inventoryService.getInventory(id);
-        StringBuilder sb = new StringBuilder("Содержимое инвентаря:\n\n");
         if (inventory == null) {
-            answer = "К сожалению, Ваш инвентарь еще пуст.";
+            responseBuilder
+                    .color(Color.CINNABAR)
+                    .description("К сожалению, Ваш инвентарь еще пуст.");
         } else {
+            responseBuilder
+                    .color(Color.of(115, 138, 219))
+                    .description("Содержимое инвентаря:");
             inventory.getItems().forEach(item ->
-                    sb.append(item.getQuantity()).append("x\t").append(item.getName())
-                            .append(".\n"));
-            answer = sb.toString();
+                    responseBuilder.addField(item.getName(), "x" + item.getQuantity(), true));
+
         }
+        responseBuilder.timestamp(Instant.now());
         return Mono.just(event.getMessage())
                 .flatMap(Message::getChannel)
-                .flatMap(channel -> channel.createMessage(answer))
+                .flatMap(channel -> channel.createMessage(responseBuilder.build()))
                 .then();
     }
 
