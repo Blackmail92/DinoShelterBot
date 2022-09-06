@@ -4,10 +4,13 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      data-source-properties:
-        character
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 90000
+      maximum-pool-size: 5
+      connection-timeout: 10000
