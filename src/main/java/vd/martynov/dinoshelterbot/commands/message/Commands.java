@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Класс, инициализирующий команды
+ */
 @Slf4j
 @Configuration
 public class Commands {
@@ -43,6 +46,11 @@ public class Commands {
         return commandsMap;
     }
 
+    /**
+     * Команда приветствия
+     * @param event
+     * @return
+     */
     private Mono<Void> greetingCommand(MessageCreateEvent event) {
         return Mono.just(event.getMessage())
                 .flatMap(Message::getChannel)
@@ -50,6 +58,10 @@ public class Commands {
                 .then();
     }
 
+    /**
+     * Вернет случайную ссылку один из gif-обьектов
+     * @return
+     */
     private String getRandomGreet() {
         List<String> greetings = List.of("https://c.tenor.com/W_u3Ncn-iiUAAAAC/отец-здарова.gif",
                 "https://c.tenor.com/nFXaaZBGaRcAAAAC/hat-tip-greetings.gif",
@@ -60,6 +72,11 @@ public class Commands {
         return greetings.get(random.nextInt(greetings.size()));
     }
 
+    /**
+     * Замена буквы в словах, начинающихся на С и Т: Судак -> Тудак, туман -> суман и т.п.
+     * @param event
+     * @return
+     */
     private Mono<Void> suTuCommand(MessageCreateEvent event) {
         String word = event.getMessage().getContent();
         String answer = (word.toLowerCase().startsWith("с")
@@ -72,10 +89,17 @@ public class Commands {
                 .then();
     }
 
+    /**
+     * Команда вызова инвентаря
+     * @param event
+     * @return
+     */
     private Mono<Void> inventoryCommand(MessageCreateEvent event) {
         Message message = event.getMessage();
+        // Список упоминаний.
         List<User> mentions = message.getUserMentions();
 
+        // Пользователь - первое упоминание в списке, если список пуст, выбирается автор сообщения
         User user = mentions.isEmpty() ? message.getAuthor().orElseThrow() : mentions.get(0);
         EmbedCreateSpec.Builder builder = createInventoryEmbed(user);
 
@@ -85,21 +109,31 @@ public class Commands {
                 .then();
     }
 
+    /**
+     * Создает встраиваемую конструкцию, имеющую удобный вид.
+     * @param user
+     * @return
+     */
     private EmbedCreateSpec.Builder createInventoryEmbed(User user) {
         log.info("{} id: {}", user.getUsername(), user.getId().asLong());
 
         EmbedCreateSpec.Builder respBuilder = EmbedCreateSpec.builder()
                 .author(user.getTag(), null, user.getAvatarUrl());
+        // Если сообщение от бота, игнор
         if (user.isBot()) {
             return respBuilder.color(Color.CINNABAR).description("Ботам не нужны инвентари, кожаный ублюдок.");
         }
 
+        // Получаем инвентарь из репозитория
         Inventory inventory = inventoryService.getInventory(user.getId().asLong());
+
+        // Если инвентарь не найден, вывести об этом сообщение
         if (inventory == null) {
             respBuilder.color(Color.CINNABAR).description("К сожалению, инвентарь еще пуст.");
         } else {
             List<Item> items = inventory.getItems();
             respBuilder.color(Color.of(115, 138, 219)).description("Содержимое инвентаря:");
+            // На каждый предмет создается отдельное поле, поля записываются как строки в таблице - друг под другом
             items.forEach(item -> respBuilder.addField(item.getName(), "x" + item.getQuantity(), false));
         }
         return respBuilder;

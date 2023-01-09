@@ -12,12 +12,21 @@ import vd.martynov.dinoshelterbot.commands.Command;
 
 import java.util.Map;
 
+/**
+ * Основная конфигурация бота
+ */
 @Configuration
 public class BotConfiguration {
 
+    // Авторизационный токен Discord-бота
     @Value("${token}")
     private String token;
 
+    /**
+     * Создание объекта {@link discord4j.core.DiscordClient} для дальнейшей регистрации событий
+     * @param commands
+     * @return
+     */
     @Bean
     GatewayDiscordClient gatewayDiscordClient(Map<String, Command> commands) {
         GatewayDiscordClient client = DiscordClientBuilder.create(token).build().login().block();
@@ -31,10 +40,20 @@ public class BotConfiguration {
         return client;
     }
 
+    /**
+     * Обработка команд
+     * @param commands
+     * @param content
+     * @param event
+     * @return
+     */
     private Mono<Void> routeCommands(Map<String, Command> commands, String content, MessageCreateEvent event) {
+        // Если предшествующее сообщение написано ботом, игнорировать
         if (event.getMessage().getAuthor().orElseThrow().isBot()) {
             return Mono.empty();
         }
+
+        // Разделение в зависимости от текста сообщения
         Command command;
         String message = content.toLowerCase();
         if (message.contains("привет") && message.contains("шелтер")) {

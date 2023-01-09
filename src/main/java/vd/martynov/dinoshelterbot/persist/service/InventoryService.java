@@ -7,6 +7,9 @@ import vd.martynov.dinoshelterbot.persist.repository.InventoryRepository;
 
 import java.util.List;
 
+/**
+ * Прослойка логики для работы с инвентарем (пока состоит лишь из вызова методов репозитория)
+ */
 @Service
 public class InventoryService {
 

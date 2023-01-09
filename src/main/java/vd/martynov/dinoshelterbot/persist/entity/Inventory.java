@@ -5,6 +5,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Инвентарь, привязан к Discord ID пользователя
+ */
 @Getter
 @Setter
 @Builder
@@ -14,9 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 public class Inventory {
 
+    // Discord snowflake id
     @Id
     private Long id;
 
+    // Список хранящихся в инвентаре предметов - связь с сущностью "предмет"
     @OneToMany(mappedBy = "inventory", fetch = FetchType.EAGER)
     private List<Item> items;
 }
